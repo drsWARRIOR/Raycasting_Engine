@@ -1,0 +1,42 @@
+cmake_minimum_required(VERSION 3.15)
+
+project(Raycasting_Engine)
+
+# Set the C standard
+set(CMAKE_C_STANDARD 11)
+
+# Set the output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# SDL2 Directory
+set(SDL2_DIR ${CMAKE_SOURCE_DIR}/third-party/SDL2)
+
+# Include SDL2 headers
+include_directories(${SDL2_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/includes)
+
+# Add the SDL2 library for linking
+if (WIN32)
+    set(SDL2_LIBRARIES ${SDL2_DIR}/lib/x64/SDL2.lib ${SDL2_DIR}/lib/x64/SDL2main.lib)
+else()
+    message(FATAL_ERROR "This setup is for Windows only.")
+endif()
+
+# Add source files
+file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/src/*.c)
+
+# Add executable target
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+# Link SDL2 libraries
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+
+# Copy SDL2 DLLs to the output directory (for Windows runtime)
+if (WIN32)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${SDL2_DIR}/lib/x64
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+endif()
