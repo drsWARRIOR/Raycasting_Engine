@@ -11,7 +11,7 @@ void RunWin(const char* title, int posX, int posY, int width, int height)
 
 	printf("SDL has been initialized!!! \n");
 
-	SDL_Window* win = SDL_CreateWindow(title, posX, posY, width, height, SDL_WINDOW_SHOWN);
+	win = SDL_CreateWindow(title, posX, posY, width, height, SDL_WINDOW_SHOWN);
 
 	if (win == NULL)
 	{
@@ -20,7 +20,7 @@ void RunWin(const char* title, int posX, int posY, int width, int height)
 		exit(-1);
 	}
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(win, -1, 0);
+	renderer = SDL_CreateRenderer(win, -1, 0);
 
 	if (renderer == NULL)
 	{

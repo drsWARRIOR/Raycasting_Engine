@@ -3,7 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <SDL.h>
+#include <Shapes.h>
+#include <math.h>
+
+#define FRAME_RATE 60
 
 #define MAP_ROW 11
 #define MAP_COLUMN 15
@@ -20,6 +23,9 @@
     lastFrameTime = SDL_GetTicks(); \
 }
 
+extern SDL_Window* win;
+extern SDL_Renderer* renderer;
+
 void Process_Input();
 
 void Begin();
@@ -34,4 +40,17 @@ bool isRunning;
 struct MapGrid
 {
 	int grid[MAP_ROW][MAP_COLUMN];
+};
+
+struct Player
+{
+    float x;
+    float y;
+
+    int horizontalAxis;
+    int verticalAxis;
+
+    float rotAngle;
+    float moveVelocity;
+    float angularVelocity;
 };
