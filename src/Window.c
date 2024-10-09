@@ -36,8 +36,9 @@ void RunWin(const char* title, int posX, int posY, int width, int height)
 
 	while (isRunning)
 	{
-		Update();
 		Process_Input();
+		Update();
+		Render();
 	}
 
 	SDL_DestroyWindow(win);
