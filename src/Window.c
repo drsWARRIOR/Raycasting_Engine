@@ -1,5 +1,8 @@
 #include <Window.h>
 
+SDL_Window* win = NULL;
+SDL_Renderer* renderer = NULL;
+
 void RunWin(const char* title, int posX, int posY, int width, int height)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)

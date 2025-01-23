@@ -1,7 +1,5 @@
 #include <Core.h>
 
-float lastFrameTime = 0;
-
 struct MapGrid map = {
 	.grid = {
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -19,10 +17,11 @@ struct MapGrid map = {
 };
 
 struct Player player;
+float lastFrameTime = 0;
+bool isRunning = true;
 
 void Begin()
 {
-	//inFrameTime = 1000.0f / FRAME_RATE;
 	CORE_BEGIN();
 
 	printf("Begin function called!!!! \n");
@@ -40,7 +39,7 @@ void Begin()
 
 void Update()
 {
-	CORE_UPDATE();
+	CORE_UPDATE(lastFrameTime);
 
 	printf("x = %d, y = %d \n", player.horizontalAxis, player.verticalAxis);
 
@@ -51,7 +50,7 @@ void Update()
 	float pos_x = player.x + cos(player.rotAngle) * hypoStep;
 	float pos_y = player.y + sin(player.rotAngle) * hypoStep;
 
-	if (IsWallExist(pos_x, pos_y) != 1) 
+	if (IsWallExist(pos_x, pos_y) != 1)
 	{
 		player.x = pos_x;
 		player.y = pos_y;
@@ -65,7 +64,7 @@ void Render()
 	SDL_RenderClear(renderer);
 
 	DrawGridMap(renderer, BLOCK_SIZE, MINI_FACTOR, MAP_ROW, MAP_COLUMN, &map);
-	DrawPlayer(renderer, MINI_FACTOR,player.x, player.y, player.width, player.height);
+	DrawPlayer(renderer, MINI_FACTOR, player.x, player.y, player.width, player.height);
 
 	SDL_RenderPresent(renderer);
 }
@@ -98,7 +97,7 @@ void Process_Input()
 			isRunning = false;
 		}
 	}
-	else if (event.type = SDL_KEYUP)
+	else if (event.type == SDL_KEYUP)
 	{
 		if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_DOWN) {
 			player.verticalAxis = 0;
@@ -110,7 +109,7 @@ void Process_Input()
 
 }
 
-inline void DrawGridMap(SDL_Renderer* renderer, int block_size, float mini_factor, int map_row, int map_column, struct MapGrid* map)
+void DrawGridMap(SDL_Renderer* renderer, int block_size, float mini_factor, int map_row, int map_column, struct MapGrid* map)
 {
 	for (int i = 0; i < map_row; i++)
 	{
@@ -148,10 +147,10 @@ inline void DrawGridMap(SDL_Renderer* renderer, int block_size, float mini_facto
 	}
 }
 
-inline void DrawPlayer(SDL_Renderer* renderer, float mini_factor,float pos_x, float pos_y, int width, int height)
+void DrawPlayer(SDL_Renderer* renderer, float mini_factor, float pos_x, float pos_y, int width, int height)
 {
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	SDL_RenderDrawLine(renderer, player.x * mini_factor, player.y *mini_factor, (player.x + cos(player.rotAngle) * 30) * mini_factor, (player.y + sin(player.rotAngle) * 30) * mini_factor);
+	SDL_RenderDrawLine(renderer, player.x * mini_factor, player.y * mini_factor, (player.x + cos(player.rotAngle) * 30) * mini_factor, (player.y + sin(player.rotAngle) * 30) * mini_factor);
 }
 
 int IsWallExist(float x, float y)
