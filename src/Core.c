@@ -1,167 +1,176 @@
 #include <Core.h>
 
+// Define the game map grid with walls (1) and empty spaces (0)
 struct MapGrid map = {
 	.grid = {
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
-		{1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1},
-		{1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1},
-		{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	}
 };
 
+// Player struct instance to hold player position, size, rotation, and movement info
 struct Player player;
+
+// Time of the last frame, used for frame rate control and delta time calculation
 float lastFrameTime = 0;
+
+// Flag to control the main loop, true while the game runs
 bool isRunning = true;
 
+// Array to store rays cast each frame (used for raycasting in 3D rendering)
+struct Ray rays_arr[NUM_RAYS];
+
+// Pointer to color buffer holding pixels to be rendered on screen
+Uint32* colorBuffer = NULL;
+
+// SDL texture that wraps the color buffer for rendering
+SDL_Texture* colorBufferTexture = NULL;
+
+
+
+// Initialize game state and resources
 void Begin()
 {
-	CORE_BEGIN();
+	CORE_BEGIN();  // Set frame duration for target FPS
 
 	printf("Begin function called!!!! \n");
 
-	player.x = (BLOCK_SIZE * MAP_COLUMN) / 2;
-	player.y = (BLOCK_SIZE * MAP_ROW) / 2;
+	// Initialize player position in the center or empty space of the map
+	PlayerStartPosition(&map, &player);
+
 	player.width = PLAYER_SIZE;
 	player.height = PLAYER_SIZE;
+
+	// Initialize input axes to zero (no movement)
 	player.horizontalAxis = 0;
 	player.verticalAxis = 0;
-	player.rotAngle = M_PI / 2;
+
+	// Face player initially to 90 degrees (facing down)
+	player.rotAngle = SDL_PI_F / 2;
+
+	// Movement speed in pixels per frame (or per update)
 	player.moveVelocity = 3;
-	player.angularVelocity = 2 * (M_PI / 180);
+
+	// Angular velocity for rotation (converted from degrees to radians)
+	player.angularVelocity = 2 * (SDL_PI_F / 180);
+
+	// Allocate memory for the color buffer (width * height pixels)
+	colorBuffer = (Uint32*)malloc(sizeof(Uint32) * WIN_WIDTH * WIN_HEIGHT);
+
+	// Create an SDL texture that uses the color buffer pixels
+	colorBufferTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIN_WIDTH, WIN_HEIGHT);
 }
 
+// Update game logic every frame
 void Update()
 {
-	CORE_UPDATE(lastFrameTime);
+	CORE_UPDATE(lastFrameTime); // Frame timing and delta time update
 
-	printf("x = %d, y = %d \n", player.horizontalAxis, player.verticalAxis);
-
+	// Update player rotation based on horizontal input axis
 	player.rotAngle += player.horizontalAxis * player.angularVelocity;
 
+	// Calculate how far the player moves forward/backward this frame
 	float hypoStep = player.verticalAxis * player.moveVelocity;
 
+	// Calculate new proposed player position based on rotation and movement step
 	float pos_x = player.x + cos(player.rotAngle) * hypoStep;
 	float pos_y = player.y + sin(player.rotAngle) * hypoStep;
 
-	if (IsWallExist(pos_x, pos_y) != 1)
+	// Check if the new position collides with a wall; if no collision, update player position
+	if (IsWallExist(pos_x, pos_y, &map) != 1)
 	{
 		player.x = pos_x;
 		player.y = pos_y;
 	}
 
+	// Cast rays from player position for rendering the 3D view
+	CastAllRays(&player, rays_arr, &map);
 }
 
+// Render all elements every frame
 void Render()
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Clear screen with black color
 	SDL_RenderClear(renderer);
 
-	DrawGridMap(renderer, BLOCK_SIZE, MINI_FACTOR, MAP_ROW, MAP_COLUMN, &map);
-	DrawPlayer(renderer, MINI_FACTOR, player.x, player.y, player.width, player.height);
+	// Draw the 3D walls based on rays and player info, write pixels into colorBuffer
+	DrawWalls(renderer, &player, rays_arr, colorBuffer, 0xFFFFFFFF, 0xFFCCCCCC, 0xFFF7D26A, 0xFF8AD6F2);
 
+	// Render the color buffer texture on the screen
+	RenderColorBuffer(renderer, colorBufferTexture, colorBuffer);
+
+	// Clear the color buffer (set all pixels to black)
+	ClearColorBuffer(colorBuffer, 0xFF000000);
+
+	// Draw the 2D grid map on the screen (top-down view)
+	DrawGridMap(renderer, BLOCK_SIZE, MINI_FACTOR, MAP_ROW, MAP_COLUMN, &map);
+
+	// Draw rays (lines) from player to walls on 2D map for visualization
+	DrawRays(renderer, &player, rays_arr);
+
+	// Draw the player icon on the 2D map
+	DrawPlayer(renderer, &player);
+
+	// Present the rendered frame on the screen
 	SDL_RenderPresent(renderer);
 }
 
+// Handle user input events
 void Process_Input()
 {
 	SDL_Event event;
 
-	SDL_PollEvent(&event);
+	SDL_PollEvent(&event);  // Poll one event from the SDL event queue
 
-	if (event.type == SDL_QUIT)
+	if (event.type == SDL_EVENT_QUIT) // SDL3 event constant for quit
 	{
-		isRunning = false;
+		isRunning = false;  // Signal to stop the main loop
 	}
-	else if (event.type == SDL_KEYDOWN)
+	else if (event.type == SDL_EVENT_KEY_DOWN) // Key press event
 	{
-		if (event.key.keysym.sym == SDLK_UP) {
+		// Update movement axes based on arrow key pressed
+		if (event.key.key == SDLK_UP) {
 			player.verticalAxis = 1;
 		}
-		else if (event.key.keysym.sym == SDLK_DOWN) {
+		else if (event.key.key == SDLK_DOWN) {
 			player.verticalAxis = -1;
 		}
-		else if (event.key.keysym.sym == SDLK_LEFT) {
+		else if (event.key.key == SDLK_LEFT) {
 			player.horizontalAxis = -1;
 		}
-		else if (event.key.keysym.sym == SDLK_RIGHT) {
+		else if (event.key.key == SDLK_RIGHT) {
 			player.horizontalAxis = 1;
 		}
-		else if (event.key.keysym.sym == SDLK_ESCAPE) {
-			isRunning = false;
+		else if (event.key.key == SDLK_ESCAPE) {
+			isRunning = false;  // Exit on Escape key
 		}
 	}
-	else if (event.type == SDL_KEYUP)
+	else if (event.type == SDL_EVENT_KEY_UP)  // Key release event
 	{
-		if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_DOWN) {
+		// Reset movement axes when arrow keys are released
+		if (event.key.key == SDLK_UP || event.key.key == SDLK_DOWN) {
 			player.verticalAxis = 0;
 		}
-		if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT) {
+		if (event.key.key == SDLK_LEFT || event.key.key == SDLK_RIGHT) {
 			player.horizontalAxis = 0;
 		}
 	}
-
 }
 
-void DrawGridMap(SDL_Renderer* renderer, int block_size, float mini_factor, int map_row, int map_column, struct MapGrid* map)
+// Free allocated resources and destroy SDL objects
+void DeleteResources()
 {
-	for (int i = 0; i < map_row; i++)
-	{
-		for (int j = 0; j < map_column; j++)
-		{
-			int blockX = j * block_size;
-			int blockY = i * block_size;
-
-			if (map->grid[i][j] == 0) {
-				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-				SDL_Rect maptilerect = { mini_factor * blockX, mini_factor * blockY, mini_factor * block_size, mini_factor * block_size };
-				SDL_RenderFillRect(renderer, &maptilerect);
-			}
-			else
-			{
-				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-				SDL_Rect maptilerect = { blockX, blockY, block_size, block_size };
-				SDL_RenderFillRect(renderer, &maptilerect);
-			}
-		}
-	}
-
-	SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
-
-	for (int i = 0; i <= map_column; i++)
-	{
-		int x = i * block_size;
-		SDL_RenderDrawLine(renderer, x, 0, x, map_row * block_size);
-	}
-
-	for (int i = 0; i <= map_row; i++)
-	{
-		int y = i * block_size;
-		SDL_RenderDrawLine(renderer, 0, y, map_column * block_size, y);
-	}
-}
-
-void DrawPlayer(SDL_Renderer* renderer, float mini_factor, float pos_x, float pos_y, int width, int height)
-{
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	SDL_RenderDrawLine(renderer, player.x * mini_factor, player.y * mini_factor, (player.x + cos(player.rotAngle) * 30) * mini_factor, (player.y + sin(player.rotAngle) * 30) * mini_factor);
-}
-
-int IsWallExist(float x, float y)
-{
-	if (x < 0 || x > WIN_WIDTH || y < 0 || y > WIN_HEIGHT)
-	{
-		return 1;
-	}
-
-	int gridIndexX = floor(x / BLOCK_SIZE);
-	int gridIndexY = floor(y / BLOCK_SIZE);
-
-	return map.grid[gridIndexY][gridIndexX] != 0;
+	DeleteColorBuffer(&colorBuffer);   // Free the color buffer memory
+	SDL_DestroyTexture(colorBufferTexture);  // Destroy texture
+	SDL_DestroyRenderer(renderer);  // Destroy renderer
+	SDL_DestroyWindow(win);         // Destroy window
 }

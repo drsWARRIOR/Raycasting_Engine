@@ -1,5 +1,10 @@
 #pragma once
 
-#include <Engine.h>
+#include <Globals.h>  // Include global constants and shared declarations
 
-void RunWin(const char* title, int posX, int posY, int width, int height);
+// Starts the main SDL window and runs the application loop
+// Parameters:
+//  - title: Window title string
+//  - width: Window width in pixels
+//  - height: Window height in pixels
+void RunWin(const char* title, int width, int height);
