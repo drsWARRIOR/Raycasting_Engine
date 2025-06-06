@@ -43,7 +43,6 @@ cmake .. -G "Visual Studio 17 2022"
 
 ``` 
 .\Raycasting_Engine.sln
-
 ```
 
 4. Once the Solution is opened, find the project named as "Raycasting_Engine" in the solution explorer, and right click on it and select the option "Set as Startup Project" from the dropdown menu, this will set the the main Raycasting_Engine project as Startup project
