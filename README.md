@@ -6,7 +6,7 @@ A simple raycasting engine implementation in C, inspired by the raycasting mecha
 
 - [Overview](#Overview)
 - [Buidling Instructions](#Building_Instructions)
-- [Features](#features)
+- [Features](#Features)
 
 ## Overview
 
@@ -18,7 +18,7 @@ This project is built from scracth without any game engine, uses SDL3 for graphi
 
 The project supports Microsoft Windows, and Linux
 
-### Windows Building Instructions
+### Windows Buidling Instructions
 
 Project supports MSVC/Visual Studio and MinGW
 
@@ -105,4 +105,18 @@ make
 ./bin/Raycasting_Engine
 ```
 
+## Features
 
+- Grid-Based Map
+
+    ![Image](https://github.com/user-attachments/assets/932750e0-9842-460f-b912-71688b01f81b)
+    
+The world represented as 2D grid where each cell can either be wall or empty space. This approach makes the collision detection simple and efficient, level design straightforward
+
+- Player Movement and Control
+
+Smooth player movement with support for turning, walking forward/backward,Keyboard input is handled via SDL, giving responsive control in real time.
+
+- Wall Rendering via Raycasting
+
+Implements a fundamental raycasting algorithm that casts rays in the direction the player is facing to detect walls. The engine calculates wall distances and renders vertical strips on screen, simulating a 3D perspective from a 2D map.
