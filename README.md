@@ -14,7 +14,7 @@ The Raycasting Engine is a 2.5D graphics renderer written in C, built to simulat
 
 This project is built from scracth without any game engine, uses SDL3 for graphics, input, and windowing. It helps in learning about how early 3D engines handled rendering under the hood
 
-## Building Instructions
+## Building_Instructions
 
 The project supports Microsoft Windows, and Linux
 
