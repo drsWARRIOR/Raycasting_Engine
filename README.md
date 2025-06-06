@@ -1,3 +1,4 @@
+
 # Raycasting Engine
 
 A simple raycasting engine implementation in C, inspired by the raycasting mechanism of *Wolfenstein 3D*. This project showcase the fundamental logic and algoriths behind early 3D graphics and rendering.
@@ -110,13 +111,18 @@ make
 - Grid-Based Map
 
     ![Image](https://github.com/user-attachments/assets/932750e0-9842-460f-b912-71688b01f81b)
-    
+
 The world represented as 2D grid where each cell can either be wall or empty space. This approach makes the collision detection simple and efficient, level design straightforward
 
 - Player Movement and Control
+
+![Image](https://github.com/user-attachments/assets/1718b259-7be3-43a6-92fe-d71381c87a5b)
 
 Smooth player movement with support for turning, walking forward/backward,Keyboard input is handled via SDL, giving responsive control in real time.
 
 - Wall Rendering via Raycasting
 
+![Image](https://github.com/user-attachments/assets/86c27df6-0187-457f-8758-2e6332765869)
+
 Implements a fundamental raycasting algorithm that casts rays in the direction the player is facing to detect walls. The engine calculates wall distances and renders vertical strips on screen, simulating a 3D perspective from a 2D map.
+
