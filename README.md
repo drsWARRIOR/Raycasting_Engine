@@ -11,15 +11,15 @@ A simple raycasting engine implementation in C, inspired by the raycasting mecha
 
 ## Overview
 
-The Raycasting Engine is a 2.5D graphics renderer written in C, built to simulate a 3D perpective with classic raycasting technique. Inspired by Wolfenstein 3D, it shows how a flat 2D map can be transformed into pseudo 3D world with the help of basic trignometry and grid based logic.
+The Raycasting Engine is a 2.5D graphics renderer written in C, built to simulate a 3D perpective with the classic raycasting technique. Inspired by Wolfenstein 3D, it shows how a flat 2D map can be transformed into pseudo-3D world with the help of basic trignometry and grid based logic.
 
-This project is built from scracth without any game engine, uses SDL3 for graphics, input, and windowing. It helps in learning about how early 3D engines handled rendering under the hood
+This project is built from scratch without any game engine, uses SDL3 for graphics, input, and windowing. It helps in learning about how early 3D engines handled rendering under the hood
 
 ## Building_Instructions
 
-The project supports Microsoft Windows, and Linux
+The project supports Microsoft Windows and Linux
 
-### Windows Buidling Instructions
+### Windows Building Instructions
 
 Project supports MSVC/Visual Studio and MinGW
 
@@ -32,22 +32,22 @@ Project supports MSVC/Visual Studio and MinGW
 git clone --recurse-submodules https://github.com/drsWARRIOR/Raycasting_Engine.git 
 ```
 
-2. Create the Folder for Buidling, and build the project in the folder using cmake
+2. Create the Folder for building, and build the project in the folder using CMake
 ``` 
 mkdir build
 cd build
 cmake .. -G "Visual Studio 17 2022"
 ```
 
-3. Once building process is complete, a Visual Studio Solution will be generated. Open the visual studio solution file named as "Raycasting_Engine.sln"
+3. Once the building process is complete, a Visual Studio Solution will be generated. Open the Visual Studio solution file named "Raycasting_Engine.sln"
 
 ``` 
 .\Raycasting_Engine.sln
 ```
 
-4. Once the Solution is opened, find the project named as "Raycasting_Engine" in the solution explorer, and right click on it and select the option "Set as Startup Project" from the dropdown menu, this will set the the main Raycasting_Engine project as Startup project
+4. Once the Solution is opened, find the project named as "Raycasting_Engine" in the solution explorer, and right click on it and select the option "Set as Startup Project" from the dropdown menu. This will set the main Raycasting_Engine project as the Startup project
 
-5. Build the solution and Run the Project
+5. Build the solution and run the Project
 
 #### MinGW
 
@@ -56,9 +56,9 @@ cmake .. -G "Visual Studio 17 2022"
 git clone --recurse-submodules https://github.com/drsWARRIOR/Raycasting_Engine.git 
 ```
 
-*Note: Makesure that the MinGW is installed and properly set in enviroment variables*
+*Note: Make sure that the MinGW is installed and properly set in environment variables*
 
-2. Create the Folder for Buidling, and build the project in the folder using cmake
+2. Create the Folder for building, and build the project in the folder using CMake
 ```
 mkdir build
 cd build
@@ -66,23 +66,23 @@ cmake .. -G "MinGW Makefiles"
 mingw32-make
 ```
 
-*Note: Avoid spaces in the project path when building with MinGW, as they may throw error while building makefile*
+*Note: Avoid spaces in the project path when building with MinGW, as they may throw an error while building the makefile*
 
-3. Now building is completed, you can run the Raycasting_Engine.exe file in /build/bin/ directory
+3. Now that the building is completed, you can run the Raycasting_Engine.exe file in the /build/bin/ directory
 
 ```
 .\bin\Raycasting_Engine.exe
 ```
 
-### Linux Buidling Instructions
+### Linux Building Instructions
 
-To build on linux you will need git, cmake, gcc and SDL3 building prerequisites
+To build on Linux, you will need git, cmake, gcc, and SDL3 building prerequisites
 
 #### Debian
 
 - Prerequisite installation
 
-1. This command install GCC, Git, Cmake and all SDL3 building prerequisites
+1. This command installs GCC, Git, CMake ,and all SDL3 building prerequisites
 ```
 sudo apt install build-essential cmake git libx11-dev libgl1-mesa-dev libxext-dev libwayland-dev libdrm-dev libgbm-dev libpulse-dev libudev-dev libasound2-dev libsamplerate0-dev
 ```
@@ -92,14 +92,14 @@ git clone --recurse-submodules https://github.com/drsWARRIOR/Raycasting_Engine.g
 cd Raycasting_Engine
 ```
 
-3. Create the Folder for Buidling, and build the project in the folder using cmake
+3. Create the Folder for building, and build the project in the folder using CMake
 ```
 mkdir build
 cd build
 cmake ..
 make
 ```
-4. Now building is completed, you can run the Raycasting_Engine.exe file in /build/bin/ directory
+4. Now that the building is completed, you can run the Raycasting_Engine file in /build/bin/ directory
 
 ```
 ./bin/Raycasting_Engine
