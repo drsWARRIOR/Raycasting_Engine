@@ -1,4 +1,3 @@
-
 # Raycasting Engine
 
 A simple raycasting engine implementation in C, inspired by the raycasting mechanism of *Wolfenstein 3D*. This project showcase the fundamental logic and algoriths behind early 3D graphics and rendering.
@@ -125,3 +124,5 @@ Smooth player movement with support for turning, walking forward/backward,Keyboa
 
 Implements a fundamental raycasting algorithm that casts rays in the direction the player is facing to detect walls. The engine calculates wall distances and renders vertical strips on screen, simulating a 3D perspective from a 2D map.
 
+#### If you want learn about raycasting algorithm in detail
+Check this article by Liam Wynn https://wynnliam.github.io/raycaster/news/tutorial/2019/03/23/raycaster-part-01.html
