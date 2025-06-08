@@ -1,6 +1,6 @@
 # Raycasting Engine
 
-A simple raycasting engine implementation in C, inspired by the raycasting mechanism of *Wolfenstein 3D*. This project showcase the fundamental logic and algoriths behind early 3D graphics and rendering.
+A simple raycasting engine implementation in C, inspired by the raycasting mechanism of *Wolfenstein 3D*. This project showcases the fundamental logic and algorithms behind early 3D graphics and rendering.
 
 ## Contents
 
@@ -10,7 +10,7 @@ A simple raycasting engine implementation in C, inspired by the raycasting mecha
 
 ## Overview
 
-The Raycasting Engine is a 2.5D graphics renderer written in C, built to simulate a 3D perpective with the classic raycasting technique. Inspired by Wolfenstein 3D, it shows how a flat 2D map can be transformed into pseudo-3D world with the help of basic trignometry and grid based logic.
+The Raycasting Engine is a 2.5D graphics renderer written in C, built to simulate a 3D perspective with the classic raycasting technique. Inspired by Wolfenstein 3D, it shows how a flat 2D map can be transformed into a pseudo-3D world with the help of basic trigonometry and grid based logic.
 
 This project is built from scratch without any game engine, uses SDL3 for graphics, input, and windowing. It helps in learning about how early 3D engines handled rendering under the hood
 
@@ -55,7 +55,7 @@ cmake .. -G "Visual Studio 17 2022"
 git clone --recurse-submodules https://github.com/drsWARRIOR/Raycasting_Engine.git 
 ```
 
-*Note: Make sure that the MinGW is installed and properly set in environment variables*
+*Note: Make sure that MinGW is installed and properly set in the environment variables*
 
 2. Create the Folder for building, and build the project in the folder using CMake
 ```
@@ -81,7 +81,7 @@ To build on Linux, you will need git, cmake, gcc, and SDL3 building prerequisite
 
 - Prerequisite installation
 
-1. This command installs GCC, Git, CMake ,and all SDL3 building prerequisites
+1. This command installs GCC, Git, CMake, and all SDL3 building prerequisites
 ```
 sudo apt install build-essential cmake git libx11-dev libgl1-mesa-dev libxext-dev libwayland-dev libdrm-dev libgbm-dev libpulse-dev libudev-dev libasound2-dev libsamplerate0-dev
 ```
@@ -110,13 +110,13 @@ make
 
     ![Image](https://github.com/user-attachments/assets/932750e0-9842-460f-b912-71688b01f81b)
 
-The world represented as 2D grid where each cell can either be wall or empty space. This approach makes the collision detection simple and efficient, level design straightforward
+The world is represented as a 2D grid where each cell can either be a wall or empty space. This approach makes the collision detection simple and efficient, level design straightforward
 
 - Player Movement and Control
 
 ![Image](https://github.com/user-attachments/assets/1718b259-7be3-43a6-92fe-d71381c87a5b)
 
-Smooth player movement with support for turning, walking forward/backward,Keyboard input is handled via SDL, giving responsive control in real time.
+Smooth player movement with support for turning, walking forward/backward, Keyboard input is handled via SDL, giving responsive control in real time.
 
 - Wall Rendering via Raycasting
 
@@ -124,5 +124,5 @@ Smooth player movement with support for turning, walking forward/backward,Keyboa
 
 Implements a fundamental raycasting algorithm that casts rays in the direction the player is facing to detect walls. The engine calculates wall distances and renders vertical strips on screen, simulating a 3D perspective from a 2D map.
 
-#### If you want learn about raycasting algorithm in detail
+#### If you want to learn about the raycasting algorithm in detail
 Check this article by Liam Wynn https://wynnliam.github.io/raycaster/news/tutorial/2019/03/23/raycaster-part-01.html
