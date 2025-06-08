@@ -5,7 +5,7 @@ A simple raycasting engine implementation in C, inspired by the raycasting mecha
 ## Contents
 
 - [Overview](#Overview)
-- [Buidling Instructions](#Building_Instructions)
+- [Building Instructions](#Building_Instructions)
 - [Features](#Features)
 
 ## Overview
